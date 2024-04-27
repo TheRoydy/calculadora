@@ -3,17 +3,11 @@ package com.example.calculadora
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
-    //0->nada; 1->suma; 2->resta; 3->multi; 4->division
-    var num2: Double = 0.0;
-    lateinit var txt_num2: TextView;
-    lateinit var txt_num1: TextView;
-    var operacion : Int = 0
+    lateinit var txt_num1: TextView
+    lateinit var txt_num2: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,49 +18,76 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun presionarNumero(view: View) {
-        val num1: String = txt_num1.text.toString().toString()
-
-        when (view.id) {
-            R.id.btn_num0 -> txt_num1.setText(num1 + "0")
-            R.id.btn_num1 -> txt_num1.setText(num1 + "1")
-            R.id.btn_num2 -> txt_num1.setText(num1 + "2")
-            R.id.btn_num3 -> txt_num1.setText(num1 + "3")
-            R.id.btn_num4 -> txt_num1.setText(num1 + "4")
-            R.id.btn_num5 -> txt_num1.setText(num1 + "5")
-            R.id.btn_num6 -> txt_num1.setText(num1 + "6")
-            R.id.btn_num7 -> txt_num1.setText(num1 + "7")
-            R.id.btn_num8 -> txt_num1.setText(num1 + "8")
-            R.id.btn_num9 -> txt_num1.setText(num1 + "9")
-            R.id.btn_punto -> txt_num1.setText(num1 + ".")
+        val buttonText = when (view.id) {
+            R.id.btn_num0 -> "0"
+            R.id.btn_num1 -> "1"
+            R.id.btn_num2 -> "2"
+            R.id.btn_num3 -> "3"
+            R.id.btn_num4 -> "4"
+            R.id.btn_num5 -> "5"
+            R.id.btn_num6 -> "6"
+            R.id.btn_num7 -> "7"
+            R.id.btn_num8 -> "8"
+            R.id.btn_num9 -> "9"
+            R.id.btn_punto -> "."
+            else -> ""
         }
+
+        txt_num1.append(buttonText)
     }
 
     fun clicOperacion(view: View) {
-        num2 = txt_num1.text.toString().toDouble()
-        var num2: String = txt_num1.text.toString()
-        txt_num1.setText("")
-        when (view.id) {
-            R.id.btn_suma -> {
-                txt_num1.setText(num2 + "+")
-                operacion = 1
-            }
-
-            R.id.btn_resta -> {
-                txt_num1.setText(num2 + "-")
-                operacion = 2
-            }
-
-            R.id.btn_multi -> {
-                txt_num1.setText(num2 + "*")
-                operacion = 3
-            }
-
-            R.id.btn_division -> {
-                txt_num1.setText(num2 + "/")
-                operacion = 4
-            }
-
-
+        val operacion = when (view.id) {
+            R.id.btn_suma -> "+"
+            R.id.btn_resta -> "-"
+            R.id.btn_multi -> "*"
+            R.id.btn_division -> "/"
+            else -> ""
         }
+
+        txt_num2.text = txt_num1.text.toString() + " " + operacion
+        txt_num1.text = ""
+    }
+
+    fun calcularResultado(view: View) {
+        val textoOperacion = txt_num2.text.toString()
+
+        if (textoOperacion.isBlank()) {
+            return
+        }
+
+        try {
+            val partes = textoOperacion.split(" ")
+            val numero1 = partes[0].toDouble()
+            val operador = partes[1]
+            val numero2 = txt_num1.text.toString().toDouble()
+            val resultado = when (operador) {
+                "+" -> numero1 + numero2
+                "-" -> numero1 - numero2
+                "*" -> numero1 * numero2
+                "/" -> numero1 / numero2
+                else -> throw IllegalArgumentException("Operador no válido")
+            }
+            txt_num2.text = if (resultado.toInt().toDouble() == resultado) {
+                resultado.toInt().toString()
+            } else {
+                resultado.toString()
+            }
+            txt_num1.text = ""
+        } catch (e: Exception) {
+            txt_num1.text = "Math error"
+        }
+    }
+
+    fun borrarDigito(view: View) {
+        val textoActual = txt_num1.text.toString()
+        if (textoActual.isNotEmpty()) {
+            txt_num1.text = textoActual.substring(0, textoActual.length - 1)
+        }
+    }
+
+    fun borrarTodo(view: View) {
+        txt_num1.text = ""
+        txt_num2.text = ""
     }
 }
