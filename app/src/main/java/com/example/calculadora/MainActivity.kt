@@ -58,6 +58,8 @@ class MainActivity : AppCompatActivity() {
         val textoOperacion = txt_num2.text.toString()
 
         if (textoOperacion.isBlank()) {
+            txt_num1.text = "0"
+            txt_num2.text = ""
             return
         }
 
@@ -65,7 +67,17 @@ class MainActivity : AppCompatActivity() {
             val partes = textoOperacion.split(" ")
             val numero1 = partes[0].toDouble()
             val operador = partes[1]
-            val numero2 = txt_num1.text.toString().toDouble()
+            val numero2 = if (txt_num1.text.toString().isNotEmpty()){
+                txt_num1.text.toString().toDouble()
+            } else {
+                0.0
+            }
+
+            if (operador == "/" && numero2 == 0.0){
+                txt_num1.text = "No se puede div en cero"
+                return
+            }
+
             val resultado = when (operador) {
                 "+" -> numero1 + numero2
                 "-" -> numero1 - numero2
@@ -76,16 +88,17 @@ class MainActivity : AppCompatActivity() {
 
             resultadoAnterior = resultado
 
-            txt_num2.text = if (resultado.toInt().toDouble() == resultado) {
+            txt_num1.text = if (resultado.toInt().toDouble() == resultado) {
                 resultado.toInt().toString()
             } else {
                 resultado.toString()
             }
-            txt_num1.text = ""
+            txt_num2.text = ""
         } catch (e: Exception) {
             txt_num1.text = "Math error"
         }
     }
+
 
     fun borrarDigito(view: View) {
         val textoActual = txt_num1.text.toString()

@@ -300,8 +300,8 @@
 
     <TextView
         android:id="@+id/txt_num1"
-        android:layout_width="380dp"
-        android:layout_height="110dp"
+        android:layout_width="376dp"
+        android:layout_height="145dp"
         android:hint="0"
         android:textAlignment="textEnd"
         android:textColorHighlight="#F6F6F6"
@@ -312,7 +312,7 @@
         app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.185" />
+        app:layout_constraintVertical_bias="0.14" />
 
     <TextView
         android:id="@+id/txt_num2"
@@ -326,6 +326,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.062" />
+        app:layout_constraintVertical_bias="0.023" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
