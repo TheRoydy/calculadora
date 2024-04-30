@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 class MainActivity : AppCompatActivity() {
     lateinit var txt_num1: TextView
     lateinit var txt_num2: TextView
+    var resultadoAnterior: Double? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,10 @@ class MainActivity : AppCompatActivity() {
             else -> ""
         }
 
+        if (resultadoAnterior != null) {
+            txt_num1.text = resultadoAnterior.toString()
+        }
+
         txt_num2.text = txt_num1.text.toString() + " " + operacion
         txt_num1.text = ""
     }
@@ -68,6 +73,9 @@ class MainActivity : AppCompatActivity() {
                 "/" -> numero1 / numero2
                 else -> throw IllegalArgumentException("Operador no válido")
             }
+
+            resultadoAnterior = resultado
+
             txt_num2.text = if (resultado.toInt().toDouble() == resultado) {
                 resultado.toInt().toString()
             } else {
@@ -89,5 +97,7 @@ class MainActivity : AppCompatActivity() {
     fun borrarTodo(view: View) {
         txt_num1.text = ""
         txt_num2.text = ""
+        resultadoAnterior = null
     }
 }
+
