@@ -57,45 +57,66 @@ class MainActivity : AppCompatActivity() {
     fun calcularResultado(view: View) {
         val textoOperacion = txt_num2.text.toString()
 
-        if (textoOperacion.isBlank()) {
-            txt_num1.text = "0"
-            txt_num2.text = ""
-            return
-        }
-
         try {
-            val partes = textoOperacion.split(" ")
-            val numero1 = partes[0].toDouble()
-            val operador = partes[1]
-            val numero2 = if (txt_num1.text.toString().isNotEmpty()){
-                txt_num1.text.toString().toDouble()
-            } else {
-                0.0
+            if (textoOperacion.isBlank()) {
+                val numero1 = txt_num1.text.toString().toDoubleOrNull()
+
+                if (numero1 != null) {
+                    txt_num1.text = formatNumero(numero1)
+                } else {
+                    txt_num1.text = "Ingrese un número válido"
+                }
+
+                return
             }
 
-            if (operador == "/" && numero2 == 0.0){
-                txt_num1.text = "No se puede div en cero"
+            val partes = textoOperacion.split(" ")
+            val numero1 = partes[0].toDouble()
+            val operador = partes.getOrNull(1)
+            val numero2 = txt_num1.text.toString().toDoubleOrNull()
+
+            if (operador == null && numero2 != null) {
+                txt_num1.text = formatNumero(numero1)
+                txt_num2.text = ""
+                return
+            }
+
+            if (numero2 == null && operador != null) {
+                txt_num1.text = formatNumero(numero1)
+                txt_num2.text = ""
+                return
+            }
+
+            if (operador == "/" && numero2 == 0.0) {
+                txt_num1.text = "No se puede dividir entre cero"
                 return
             }
 
             val resultado = when (operador) {
-                "+" -> numero1 + numero2
-                "-" -> numero1 - numero2
-                "*" -> numero1 * numero2
-                "/" -> numero1 / numero2
+                "+" -> numero1 + (numero2 ?: 0.0)
+                "-" -> numero1 - (numero2 ?: 0.0)
+                "*" -> numero1 * (numero2 ?: 0.0)
+                "/" -> numero1 / (numero2 ?: 0.0)
                 else -> throw IllegalArgumentException("Operador no válido")
             }
 
-            resultadoAnterior = resultado
-
-            txt_num1.text = if (resultado.toInt().toDouble() == resultado) {
-                resultado.toInt().toString()
+            txt_num1.text = if (resultado.toLong().toDouble() == resultado) {
+                resultado.toLong().toString()
             } else {
                 resultado.toString()
             }
+
             txt_num2.text = ""
         } catch (e: Exception) {
             txt_num1.text = "Math error"
+        }
+    }
+
+    private fun formatNumero(numero: Double): String {
+        return if (numero.toLong().toDouble() == numero) {
+            numero.toLong().toString()
+        } else {
+            numero.toString()
         }
     }
 
@@ -113,4 +134,5 @@ class MainActivity : AppCompatActivity() {
         resultadoAnterior = null
     }
 }
+
 
