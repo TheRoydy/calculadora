@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                 if (numero1 != null) {
                     txt_num1.text = formatNumero(numero1)
                 } else {
-                    txt_num1.text = "Ingrese un número válido"
+                    txt_num1.text = ""
                 }
 
                 return
